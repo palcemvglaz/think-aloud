@@ -1,0 +1,35 @@
+[
+  {
+    "attachments" : [
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "65A1EB7A-5289-4B85-B7A5-14226F6304EC",
+        "deviceName" : "iPhone 16 Pro",
+        "exportedFileName" : "139881A8-F496-40CF-8F5F-3A0F740A24BB.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "s_map_0_C35C6FD8-D5D4-4A60-83ED-80A84D2F3831.png",
+        "timestamp" : 1782372098.538
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "65A1EB7A-5289-4B85-B7A5-14226F6304EC",
+        "deviceName" : "iPhone 16 Pro",
+        "exportedFileName" : "0B739E80-6C88-4D72-A54F-D7BB7E64D0E6.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "s_tree_0_7881CF12-1003-498A-AE2A-D47877F18245.png",
+        "timestamp" : 1782372093.205
+      },
+      {
+        "configurationName" : "Test Scheme Action",
+        "deviceId" : "65A1EB7A-5289-4B85-B7A5-14226F6304EC",
+        "deviceName" : "iPhone 16 Pro",
+        "exportedFileName" : "FAB812EA-C31E-4F28-85F2-E2799EDA5918.png",
+        "isAssociatedWithFailure" : false,
+        "suggestedHumanReadableName" : "s_home_0_EB0C2423-7D6F-435A-A229-9D2DCDEBDD85.png",
+        "timestamp" : 1782372090.137
+      }
+    ],
+    "testIdentifier" : "ShotSiteTests/testSite()",
+    "testIdentifierURL" : "test://com.apple.xcode/Voicer/VoicerUITests/ShotSiteTests/testSite"
+  }
+]

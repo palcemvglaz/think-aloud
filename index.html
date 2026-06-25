@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Aloud — наговори думку, отримай чистий текст</title>
+<link rel="icon" href="icon.png">
+<style>
+  :root{
+    --bg:#06060c; --accent:#7c6cff; --accent2:#a99cff; --cyan:#4be3c0;
+    --txt:#f3f2fa; --txt2:rgba(255,255,255,.62); --txt3:rgba(255,255,255,.38);
+    --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.09);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"SF Pro Display",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+    background:rgba(6,6,12,.6);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:.2px}
+  .logo .appicon{width:30px;height:30px;border-radius:8px;object-fit:cover;
+    box-shadow:0 0 18px rgba(26,200,255,.45)}
+  .navlinks{display:flex;gap:26px;color:var(--txt2);font-size:14.5px;font-weight:500}
+  .navlinks a:hover{color:#fff}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;
+    padding:10px 18px;border-radius:12px;background:var(--accent);color:#fff;
+    box-shadow:0 8px 26px rgba(124,108,255,.45);transition:transform .15s,box-shadow .15s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(124,108,255,.6)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--txt)}
+
+  /* hero */
+  header.hero{position:relative;overflow:hidden;padding:96px 0 88px;text-align:center}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+  .hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(70% 50% at 50% 18%,rgba(124,108,255,.22),transparent 60%)}
+  .hero .wrap{position:relative;z-index:2}
+  .heroicon{width:92px;height:92px;border-radius:22px;display:block;margin:0 auto 24px;
+    box-shadow:0 0 60px rgba(26,200,255,.4),0 10px 30px rgba(0,0,0,.5)}
+  .pill{display:inline-block;font-size:13px;font-weight:600;color:var(--accent2);
+    border:1px solid var(--line);background:var(--card);padding:7px 14px;border-radius:30px;margin-bottom:26px}
+  h1{font-size:clamp(40px,7vw,76px);line-height:1.04;font-weight:800;letter-spacing:-.02em}
+  h1 .grad{background:linear-gradient(100deg,#b3a8ff,#7c6cff 40%,#4be3c0);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{max-width:620px;margin:22px auto 0;font-size:clamp(16px,2.4vw,20px);color:var(--txt2)}
+  .cta{display:flex;gap:14px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+  .trust{margin-top:26px;font-size:13px;color:var(--txt3)}
+
+  /* manifesto */
+  .manifest{padding:64px 0;text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(124,108,255,.05),transparent)}
+  .manifest p{max-width:780px;margin:0 auto;font-size:clamp(22px,3.4vw,32px);font-weight:700;line-height:1.32}
+  .manifest .accent{color:var(--accent2)}
+  .manifest small{display:block;margin-top:18px;font-size:15px;font-weight:500;color:var(--txt2)}
+
+  /* sections */
+  section{padding:62px 0}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);text-align:center}
+  .h2{font-size:clamp(28px,4.4vw,42px);font-weight:800;text-align:center;margin-top:10px;letter-spacing:-.01em}
+  .lead{text-align:center;color:var(--txt2);max-width:600px;margin:14px auto 0;font-size:16.5px}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;
+    transition:transform .18s,border-color .18s,background .18s}
+  .feat:hover{transform:translateY(-4px);border-color:rgba(124,108,255,.45);background:rgba(124,108,255,.06)}
+  .feat .ico{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:24px;
+    background:rgba(124,108,255,.16);margin-bottom:16px}
+  .feat h3{font-size:19px;font-weight:700;margin-bottom:8px}
+  .feat p{color:var(--txt2);font-size:15px}
+
+  /* compare */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+  @media(max-width:760px){.compare{grid-template-columns:1fr}}
+  .col{border:1px solid var(--line);border-radius:20px;padding:26px;background:var(--card)}
+  .col .tag{font-weight:700;font-size:15px;margin-bottom:18px}
+  .col ul{list-style:none;display:flex;flex-direction:column;gap:13px}
+  .col li{padding-left:30px;position:relative;color:var(--txt2);font-size:15.5px}
+  .col li::before{position:absolute;left:0;top:-1px;font-size:16px;font-weight:700}
+  .col.bad .tag{color:var(--txt3)}
+  .col.bad li::before{content:"✕";color:#ff6b6b}
+  .col.good{border-color:rgba(124,108,255,.4);background:linear-gradient(180deg,rgba(124,108,255,.09),transparent)}
+  .col.good .tag{color:var(--accent2)}
+  .col.good li::before{content:"✓";color:var(--cyan)}
+  .col.good b{color:#fff}
+
+  /* showcase */
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:48px;align-items:start}
+  @media(max-width:760px){.shots{grid-template-columns:1fr;max-width:300px;margin-inline:auto}}
+  .phone{margin:0;text-align:center}
+  .phone img{width:100%;max-width:250px;border-radius:32px;
+    box-shadow:0 26px 64px rgba(0,0,0,.6),0 0 0 8px #0c0c14,0 0 0 9px rgba(255,255,255,.06);
+    display:block;margin:0 auto}
+  .phone figcaption{margin-top:20px;color:var(--txt2);font-size:14.5px}
+  .langtoggle{display:flex;gap:2px;border:1px solid var(--line);border-radius:9px;overflow:hidden;font-size:13px}
+  .langtoggle a{padding:6px 11px;color:var(--txt3);font-weight:600}
+  .langtoggle a.on{background:rgba(124,108,255,.25);color:#fff}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+  @media(max-width:880px){.steps{grid-template-columns:1fr}}
+  .step{text-align:center;padding:10px}
+  .step .num{width:54px;height:54px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;
+    font-size:22px;font-weight:800;color:#fff;background:linear-gradient(135deg,#7c6cff,#5a49d6);
+    box-shadow:0 10px 30px rgba(124,108,255,.45)}
+  .step h3{font-size:18px;font-weight:700;margin-bottom:6px}
+  .step p{color:var(--txt2);font-size:15px;max-width:300px;margin:0 auto}
+
+  /* privacy band */
+  .band{margin:40px auto;max-width:980px;border:1px solid var(--line);border-radius:24px;
+    background:linear-gradient(135deg,rgba(75,227,192,.08),rgba(124,108,255,.08));
+    padding:46px;text-align:center}
+  .band h3{font-size:clamp(22px,3.4vw,30px);font-weight:800}
+  .band p{color:var(--txt2);max-width:620px;margin:14px auto 0;font-size:16px}
+
+  /* final cta */
+  .final{text-align:center;padding:90px 0 40px}
+  .final h2{font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-.01em}
+  .final p{color:var(--txt2);margin-top:14px;font-size:17px}
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--txt3);font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+  <nav><div class="wrap">
+    <div class="logo"><img class="appicon" src="icon.png" alt="Think Aloud"> Think&nbsp;Aloud</div>
+    <div class="navlinks">
+      <a href="#compare">Чому інакше</a><a href="#features">Можливості</a><a href="#how">Як працює</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="langtoggle"><a href="index.html" class="on">UA</a><a href="en.html">EN</a></div>
+      <a href="#get" class="btn">Спробувати</a>
+    </div>
+  </div></nav>
+
+  <header class="hero">
+    <canvas id="bg"></canvas>
+    <div class="wrap">
+      <img class="heroicon" src="icon.png" alt="Think Aloud">
+      <span class="pill">🎙️ Думки на ходу</span>
+      <h1>Наговори. Структуруй.<br><span class="grad">Отримай чистий текст.</span></h1>
+      <p class="sub">Кидай ідеї на ходу — вони самі лягають у <b>гілки</b> й <b>теми</b>, а кілька надиктовок
+        зливаються в <b>одну структуровану думку</b>. Приватно, навіть офлайн.</p>
+      <div class="cta">
+        <a href="#get" class="btn">Завантажити для iPhone</a>
+        <a href="#how" class="btn ghost">Як це працює</a>
+      </div>
+      <div class="trust">Працює офлайн · без акаунтів · без трекінгу</div>
+    </div>
+  </header>
+
+  <section id="compare" style="padding-top:72px"><div class="wrap">
+    <div class="eyebrow">Головна різниця</div>
+    <div class="h2">Купа голосових — чи структура думок?</div>
+    <p class="lead">Звичайний диктофон лише записує. Think Aloud — впорядковує.</p>
+    <div class="compare">
+      <div class="col bad">
+        <div class="tag">🎙️ Voice Memos / звичайний диктофон</div>
+        <ul>
+          <li>Усе в одній купі записів</li>
+          <li>Потрібне не знайти</li>
+          <li>Кожен запис окремо, без звʼязків</li>
+          <li>Слухати наново, щоб згадати</li>
+        </ul>
+      </div>
+      <div class="col good">
+        <div class="tag">🧠 Think Aloud</div>
+        <ul>
+          <li>Надиктовки лягають у <b>гілки</b> й <b>теми</b></li>
+          <li>Авто-групування за змістом</li>
+          <li>Кілька надиктовок → <b>одна структурована думка</b></li>
+          <li>Текст одразу, без переслуховування</li>
+        </ul>
+      </div>
+    </div>
+  </div></section>
+
+  <section id="features" style="border-top:1px solid var(--line)"><div class="wrap">
+    <div class="eyebrow">Чому Think Aloud</div>
+    <div class="h2">Що вміє Think Aloud</div>
+    <div class="grid">
+      <div class="feat"><div class="ico">🌿</div><h3>Гілки й теми</h3>
+        <p>Надиктовки складаються в гілки й теми, а кілька з них зливаються в одну <b>структуровану думку</b>.</p></div>
+      <div class="feat"><div class="ico">🇺🇦</div><h3>Точна українська + контекст</h3>
+        <p>Влучне розпізнавання української, ще й з урахуванням попередніх надиктовок — точніше за поодинокий запис.</p></div>
+      <div class="feat"><div class="ico">🤖</div><h3>Підключи свою AI</h3>
+        <p>Свій ключ Groq, Gemini, ChatGPT чи Claude — для транскрипції та чистки тексту.</p></div>
+      <div class="feat"><div class="ico">🗺️</div><h3>Мапа думок у 3D</h3>
+        <p>Твій «мозок» живою картою гілок: обертай, наближай, відкривай думку тапом.</p></div>
+      <div class="feat"><div class="ico">📤</div><h3>Експорт одним документом</h3>
+        <p>Будь-які гілки в один Markdown — сирий чи структурований — у Notes, Obsidian, Telegram.</p></div>
+      <div class="feat"><div class="ico">🔒</div><h3>Приватно й офлайн</h3>
+        <p>Без акаунтів і сервера, розпізнавання прямо на iPhone. Дані лишаються в тебе.</p></div>
+    </div>
+  </div></section>
+
+  <section id="shots" style="border-top:1px solid var(--line)"><div class="wrap">
+    <div class="eyebrow">Подивись</div>
+    <div class="h2">Так це виглядає</div>
+    <div class="shots">
+      <figure class="phone"><img src="shots/s_home.png" alt="Запис і стрічка думок"><figcaption>Записуй і чисти текст</figcaption></figure>
+      <figure class="phone"><img src="shots/s_tree.png" alt="Дерево думок"><figcaption>Дерево: Проект → Тема → Розмови</figcaption></figure>
+      <figure class="phone"><img src="shots/s_map.png" alt="3D мапа гілок"><figcaption>Мапа думок у 3D</figcaption></figure>
+    </div>
+  </div></section>
+
+  <section id="how" style="border-top:1px solid var(--line)"><div class="wrap">
+    <div class="eyebrow">Як це працює</div>
+    <div class="h2">Три кроки — і готово</div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3>Наговори</h3>
+        <p>Натисни кнопку й говори. Текст зʼявляється сам — навіть офлайн.</p></div>
+      <div class="step"><div class="num">2</div><h3>AI впорядкує</h3>
+        <p>Чистка, назва теми, стисло/розгорнуто, групування в дерево думок.</p></div>
+      <div class="step"><div class="num">3</div><h3>Користуйся</h3>
+        <p>Копіюй, експортуй, дивись мапу. Усе під рукою й приватно.</p></div>
+    </div>
+  </div></section>
+
+  <div class="final" id="get"><div class="wrap">
+    <h2>Наговори першу думку сьогодні</h2>
+    <p>Безкоштовно. Офлайн. Приватно. Для iPhone.</p>
+    <div class="cta" style="margin-top:30px"><a href="#" class="btn">Завантажити в App Store</a></div>
+  </div></div>
+
+  <footer><div class="wrap">
+    <div>© 2026 Think Aloud</div>
+    <div>Приватність · Підтримка · Зроблено в Україні 🇺🇦</div>
+  </div></footer>
+
+<script>
+// ненав'язлива «нейронна» анімація у героï
+const c=document.getElementById('bg'),x=c.getContext('2d');let W,H,pts;
+function init(){W=c.width=c.offsetWidth*2;H=c.height=c.offsetHeight*2;
+  pts=Array.from({length:46},()=>({x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*3+1}));}
+function draw(){x.clearRect(0,0,W,H);
+  for(const p of pts){p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;}
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<180){x.strokeStyle='rgba(124,108,255,'+(0.14*(1-d/180))+')';x.lineWidth=1.4;
+      x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();}}
+  for(const p of pts){x.fillStyle='rgba(169,156,255,.9)';
+    x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}
+  requestAnimationFrame(draw);}
+init();draw();addEventListener('resize',init);
+</script>
+</body>
+</html>
